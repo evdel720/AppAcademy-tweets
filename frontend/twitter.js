@@ -1,4 +1,5 @@
 const FollowToggle = require("./follow_toggle");
+const UsersSearch = require("./users_search");
 
 $(() => {
   const followButtons = $(".follow-toggle");
@@ -7,4 +8,9 @@ $(() => {
       new FollowToggle($(el));
     });
   }
+  const userSearch = $(".users-search");
+  if (userSearch.length) {
+    new UsersSearch(userSearch);
+  }
+
 });
