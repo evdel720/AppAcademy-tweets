@@ -13,19 +13,24 @@
   <br>
 
 
-  <p class="add-mention">Add Mention</p>
-  
+  <a href="javascript:void(0)" class="add-mentioned-user">Add Mention</a>
+  <div class="mentioned-users"></div>
 
-  <!-- <label>
-    Mention
-    <select name="tweet[mentioned_user_ids][]">
-      <option class="default"></option>
-      <% User.all.each do |user| %>
-        <option class="non-default" value="<%= user.id %>"><%= user.username %></option>
-      <% end %>
-    </select>
-  </label> -->
-  <br>
+  <script class="mentionscript" type="text/template">
+  <div class="erase">
+    <label>
+      Mention
+      <select name="tweet[mentioned_user_ids][]">
+        <option class="default"></option>
+        <% User.all.each do |user| %>
+          <option class="non-default" value="<%= user.id %>"><%= user.username %></option>
+        <% end %>
+      </select>
+    </label>
+    <a href="javascript:void(0)" class="remove-mentioned-user">Remove Mentioned User</a>
+    <br>
+  </div>
+  </script>
 
   <input type="Submit" value="Post Tweet!">
 </form>

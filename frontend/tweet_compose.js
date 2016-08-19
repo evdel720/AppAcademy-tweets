@@ -3,6 +3,8 @@ class TweetCompose {
     this.$el = $('.tweet-compose');
     this.handleInput();
     this.handleTyping();
+    this.addMentionedUser();
+    this.removeMentionedUser();
   }
 
   handleTyping() {
@@ -35,6 +37,7 @@ class TweetCompose {
     $(".tweetbox").val("");
     $(".non-default").prop('selected', false);
     $(".default").prop('selected', true);
+    $(".mentioned-users").empty();
   }
 
   handleSuccess(resp) {
@@ -53,6 +56,22 @@ class TweetCompose {
     }
     $("#feed").prepend($listItem);
   }
+
+  addMentionedUser() {
+    $(".add-mentioned-user").on('click', (event) => {
+      $('.mentioned-users').append($(".mentionscript").html());
+    });
+  }
+
+  removeMentionedUser(){
+    $(".mentioned-users").on('click', $(".remove-mentioned-user"), (event) => {
+      if ($(event.target).is(".remove-mentioned-user")) {
+        $(event.target).parent().remove();
+      }
+    });
+  }
+
+
 }
 
 module.exports = TweetCompose;
