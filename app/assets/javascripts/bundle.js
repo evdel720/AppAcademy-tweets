@@ -214,17 +214,7 @@
 	    this.clearInput();
 	    $(":input").prop('disabled', false);
 	
-	    let $listItem = $(`<li>${resp.content} -- <a href="/users/${resp.user_id}">${resp.user.username}</a> -- ${resp.created_at}</li>`);
-	
-	    if(resp.mentions.length){
-	      let $mentionedlist = $('<ul></ul>');
-	      resp.mentions.forEach((mention) => {
-	        let person = $(`<li><a href="/users/${mention.user.id}">${mention.user.username}</a></li>`);
-	        $mentionedlist.append(person);
-	      });
-	      $listItem.append($mentionedlist);
-	    }
-	    $("#feed").prepend($listItem);
+	    $('#feed').trigger("insert-tweet", [resp]);
 	  }
 	
 	  addMentionedUser() {
@@ -259,6 +249,12 @@
 	      e.preventDefault();
 	      this.fetchTweets();
 	    })
+	
+	    this.$ul.on("insert-tweet", (e, tweets) => {
+	      e.preventDefault();
+	      this.insertTweets([tweets], 0);
+	    })
+	
 	  }
 	
 	  fetchTweets() {
@@ -270,7 +266,7 @@
 	      dataType: "json",
 	      data: maxData,
 	      success(resp) {
-	        that.insertTweets(resp);
+	        that.insertTweets(resp, 1);
 	        if (resp.length < 20) {
 	          $(".fetch-more").remove();
 	          that.$ul.append($("<li>There's no more tweets</li>"));
@@ -281,9 +277,8 @@
 	    });
 	  }
 	
-	  insertTweets(resp) {
-	    console.log(resp);
-	    resp.forEach((tweet) => {
+	  insertTweets(tweets, ord) {
+	    tweets.forEach((tweet) => {
 	      let li = $('<li></li>')
 	      li.html(`${tweet.content} -- <a href="/users/${tweet.user.id}">${tweet.user.username}</a> -- ${tweet.created_at}`)
 	      if (tweet.mentions.length) {
@@ -294,7 +289,11 @@
 	        })
 	        li.append(mentionedUserList);
 	      }
-	      this.$ul.append(li);
+	      if (ord === 0){
+	        this.$ul.prepend(li);
+	      } else {
+	        this.$ul.append(li);
+	      }
 	    })
 	  }
 	}

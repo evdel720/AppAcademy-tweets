@@ -44,17 +44,7 @@ class TweetCompose {
     this.clearInput();
     $(":input").prop('disabled', false);
 
-    let $listItem = $(`<li>${resp.content} -- <a href="/users/${resp.user_id}">${resp.user.username}</a> -- ${resp.created_at}</li>`);
-
-    if(resp.mentions.length){
-      let $mentionedlist = $('<ul></ul>');
-      resp.mentions.forEach((mention) => {
-        let person = $(`<li><a href="/users/${mention.user.id}">${mention.user.username}</a></li>`);
-        $mentionedlist.append(person);
-      });
-      $listItem.append($mentionedlist);
-    }
-    $("#feed").prepend($listItem);
+    $('#feed').trigger("insert-tweet", [resp]);
   }
 
   addMentionedUser() {

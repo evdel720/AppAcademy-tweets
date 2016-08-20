@@ -6,6 +6,12 @@ class InfiniteTweets {
       e.preventDefault();
       this.fetchTweets();
     })
+
+    this.$ul.on("insert-tweet", (e, tweets) => {
+      e.preventDefault();
+      this.insertTweets([tweets], 0);
+    })
+
   }
 
   fetchTweets() {
@@ -17,7 +23,7 @@ class InfiniteTweets {
       dataType: "json",
       data: maxData,
       success(resp) {
-        that.insertTweets(resp);
+        that.insertTweets(resp, 1);
         if (resp.length < 20) {
           $(".fetch-more").remove();
           that.$ul.append($("<li>There's no more tweets</li>"));
@@ -28,9 +34,8 @@ class InfiniteTweets {
     });
   }
 
-  insertTweets(resp) {
-    console.log(resp);
-    resp.forEach((tweet) => {
+  insertTweets(tweets, ord) {
+    tweets.forEach((tweet) => {
       let li = $('<li></li>')
       li.html(`${tweet.content} -- <a href="/users/${tweet.user.id}">${tweet.user.username}</a> -- ${tweet.created_at}`)
       if (tweet.mentions.length) {
@@ -41,7 +46,11 @@ class InfiniteTweets {
         })
         li.append(mentionedUserList);
       }
-      this.$ul.append(li);
+      if (ord === 0){
+        this.$ul.prepend(li);
+      } else {
+        this.$ul.append(li);
+      }
     })
   }
 }
